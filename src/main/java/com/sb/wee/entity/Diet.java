@@ -1,21 +1,12 @@
 package com.sb.wee.entity;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author Suraj
- *
  */
 
 @Entity
@@ -52,20 +43,17 @@ public class Diet {
 	}
 
 	/**
-	 * @param id
 	 * @param foodName
 	 * @param quantity
 	 * @param unit
 	 * @param timestamp
 	 * @param user
 	 */
-	public Diet(int id, String foodName, int quantity, String unit, LocalDateTime timestamp, User user) {
+	public Diet(String foodName, int quantity, String unit, User user) {
 		super();
-		this.id = id;
 		this.foodName = foodName;
 		this.quantity = quantity;
 		this.unit = unit;
-		this.timestamp = timestamp;
 		this.user = user;
 	}
 

@@ -16,6 +16,6 @@ public class HibernateDAOFactory {
 
 	// You could override this if you don't want HibernateUtil for lookup
 	private static Session getCurrentSession() {
-		return HibernateUtility.getSessionFactory().getCurrentSession();
-	}
+        return HibernateUtility.getSession();
+    }
 }

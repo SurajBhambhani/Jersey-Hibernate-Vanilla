@@ -1,13 +1,5 @@
 package com.sb.wee.util;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -15,6 +7,13 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 import org.hibernate.query.Query;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public abstract class GenericHibernateDAO<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
@@ -44,11 +43,12 @@ public abstract class GenericHibernateDAO<T, ID extends Serializable> implements
 	@SuppressWarnings("unchecked")
 	public T findById(ID id, boolean lock) {
 		T entity;
+		Transaction beginTransaction = session.beginTransaction();
 		if (lock)
-			entity = (T) getSession().load(getPersistentClass(), id, LockMode.UPGRADE);
+			entity = (T) session.load(getPersistentClass(), id, LockMode.UPGRADE);
 		else
-			entity = (T) getSession().load(getPersistentClass(), id);
-
+			entity = (T) session.load(getPersistentClass(), id);
+		beginTransaction.commit();
 		return entity;
 	}
 
@@ -80,17 +80,21 @@ public abstract class GenericHibernateDAO<T, ID extends Serializable> implements
 
 	@SuppressWarnings("unchecked")
 	public T makePersistent(T entity) {
-		
+
 		Transaction beginTransaction = getSession().beginTransaction();
-		
+
 		getSession().saveOrUpdate(entity);
-		
+
 		beginTransaction.commit();
 		return entity;
 	}
 
-	public void makeTransient(T entity) {
+	public void makeTransient(ID id) {
+		Transaction beginTransaction = getSession().beginTransaction();
+		T entity = (T) session.load(getPersistentClass(), id);
 		getSession().delete(entity);
+
+		beginTransaction.commit();
 	}
 
 	public void flush() {

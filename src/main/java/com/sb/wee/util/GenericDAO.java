@@ -1,9 +1,9 @@
 package com.sb.wee.util;
 
+import org.hibernate.Session;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.hibernate.Session;
 
 public interface GenericDAO<T, ID extends Serializable> {
 
@@ -15,7 +15,7 @@ public interface GenericDAO<T, ID extends Serializable> {
 
 	T makePersistent(T entity);
 
-	void makeTransient(T entity);
-	
+	void makeTransient(ID entity);
+
 	void setSession(Session s);
 }
